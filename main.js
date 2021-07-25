@@ -91,32 +91,26 @@ $(document).ready(function () {
 
     });
 
-    $("#search-box").keyup(
-        
-        function myFunction() {
-            console.log("Seacched function called !!")
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("search-box");
-            console.log(input.value)
-            filter = input.value.toUpperCase();
-            table = document.getElementById("table-data");
-            tr = table.getElementsByTagName("tr");
+    function filterTable(event, index) {
+        var filter = event.target.value.toUpperCase();
+        var rows = document.getElementById("#table-body").rows;
+        for (var i = 0; i < rows.length; i++) {
+          var firstCol = rows[i].cells[0].textContent.toUpperCase();
+          var secondCol = rows[i].cells[1].textContent.toUpperCase();
+          var thirdCol = rows[i].cells[2].textContent.toUpperCase();
+          if ((firstCol.indexOf(filter) > -1 && index == 0) || (secondCol.indexOf(filter) > -1 && index == 1) || (thirdCol.indexOf(filter) > -1 && index == 2)) {
+            rows[i].style.display = "";
+          } else {
+            rows[i].style.display = "none";
+          }   
 
-            console.log("Tr lenght" + tr.length)
-            for (i = 0; i < tr.length; i++) {
-              td = tr[i].getElementsByTagName("td")[0];
-              if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                  tr[i].style.display = "";
-                } else {
-                  tr[i].style.display = "none";
-                }
-              }       
-            }
-          }
-    
-    )
-   
+        }
+      }
+      
+      document.getElementById('search-box').forEach(function(el,idx){
+        el.addEventListener('keyup', function(e){
+          filterTable(e, idx);
+        }, false);
+      });
       
 });
